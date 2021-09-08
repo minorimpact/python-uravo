@@ -2,9 +2,11 @@
 
 import MySQLdb
 import os
-import uravo.config
+import re
+import socket
 import sys
 import time
+import uravo.config
 
 class Uravo():
     def __init__(self):
@@ -12,8 +14,17 @@ class Uravo():
         self.db = MySQLdb.connect(host=self.config["agent"]["outpost_server"],user=self.config["agent"]["db_user"],passwd=self.config["agent"]["db_password"],db="uravo", port=int(self.config["agent"]["outpost_db_port"]), autocommit=True)
     
     def alert(self, server_id = None, AlertGroup = None, Severity = None, Summary = None, AlertKey = None, AdditionalInfo = '', Recurring = 0, Timeout = None, Agent = None):
+        self.event(server_id = server_id, AlertGroup = AlertGroup, Severity = Severity, Summary = Summary, AlertKey = AlertKey, AdditionalInfo = AdditionalInfo, Recurring = Recurring, Timeout = Timeout, Agent = Agent)
+
+    def alerts(self, server_id = None):
+        self.events(server_id = server_id)
+
+    def event(self, server_id = None, AlertGroup = None, Severity = None, Summary = None, AlertKey = None, AdditionalInfo = '', Recurring = 0, Timeout = None, Agent = None):
+        if (server_id is None):
+            server_id = re.sub(".local$","",socket.gethostname())
         if (server_id is None or AlertGroup is None or Severity is None or Summary is None): return
 
+        # TODO: Add Server object.
         #server = self.getServer(server_id)
         #if (server is None): return
 
@@ -68,7 +79,7 @@ class Uravo():
         val = (server_id, AlertGroup, Severity, Summary, AlertKey, Identifier, AdditionalInfo, Agent, Timeout, Recurring)
         c.execute(sql, val)
 
-    def alerts(self, server_id = None):
+    def events(self, server_id = None):
         c = self.db.cursor()
         sql = "SELECT * FROM alert"
         params = []
