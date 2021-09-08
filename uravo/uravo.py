@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import MySQLdb
+#import MySQLdb
+import pymysql.cursors
 import os
 import re
 import socket
@@ -11,7 +12,8 @@ import uravo.config
 class Uravo():
     def __init__(self):
         self.config = uravo.config.config
-        self.db = MySQLdb.connect(host=self.config["agent"]["outpost_server"],user=self.config["agent"]["db_user"],passwd=self.config["agent"]["db_password"],db="uravo", port=int(self.config["agent"]["outpost_db_port"]), autocommit=True)
+        #self.db = MySQLdb.connect(host=self.config["agent"]["outpost_server"],user=self.config["agent"]["db_user"],passwd=self.config["agent"]["db_password"],db="uravo", port=int(self.config["agent"]["outpost_db_port"]), autocommit=True)
+        self.db = pymysql.connect(host=self.config["agent"]["outpost_server"],user=self.config["agent"]["db_user"],password=self.config["agent"]["db_password"],database="uravo", port=int(self.config["agent"]["outpost_db_port"]), autocommit=True)
     
     def alert(self, server_id = None, AlertGroup = None, Severity = None, Summary = None, AlertKey = None, AdditionalInfo = '', Recurring = 0, Timeout = None, Agent = None):
         self.event(server_id = server_id, AlertGroup = AlertGroup, Severity = Severity, Summary = Summary, AlertKey = AlertKey, AdditionalInfo = AdditionalInfo, Recurring = Recurring, Timeout = Timeout, Agent = Agent)
@@ -91,11 +93,13 @@ class Uravo():
 
     def getServer(self, server_id = None):
         return None
-        
+
+    def main(self):
+        print(self.events())
 
 def main():
     u = Uravo()
-    print(u.events())
+    u.main()
     sys.exit()
 
 if __name__ == "__main__":
