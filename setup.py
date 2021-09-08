@@ -10,7 +10,7 @@ setup(
     author='Patrick Gillan',
     author_email = 'pgillan@minorimpact.com',
     license='GPLv3',
-    install_requires=['MySQL-python'],
+    install_requires=['mysqlclient'],
     setup_requires=[],
     tests_require=[],
 )
