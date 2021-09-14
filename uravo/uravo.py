@@ -23,7 +23,7 @@ class Uravo():
 
     def event(self, server_id = None, AlertGroup = None, Severity = None, Summary = None, AlertKey = None, AdditionalInfo = '', Recurring = 0, Timeout = None, Agent = None):
         if (server_id is None):
-            server_id = re.sub(".local$","",socket.gethostname())
+            server_id = re.sub(r"^([^.]+).*$", r"\1", socket.gethostname())
         if (server_id is None or AlertGroup is None or Severity is None or Summary is None): return
 
         # TODO: Add Server object.
