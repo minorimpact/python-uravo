@@ -53,9 +53,9 @@ class Uravo():
         elif (Severity == 'green'): Severity = 0 
 
         if (Agent is None):
-            Agent = f"{server_id}:{os.path.basename(__file__)}"
+            Agent = server_id + ':' + os.path.basename(__file__)
         
-        Identifier = f"{server_id} {AlertGroup} {AlertKey} SOCKET";
+        Identifier = server_id + ' ' + AlertGroup + ' ' + AlertKey + ' SOCKET';
 
         c = self.db.cursor()
         # Add a record to the summary table.
